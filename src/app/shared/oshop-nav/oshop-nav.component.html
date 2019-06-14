@@ -1,7 +1,24 @@
-<nav class="mat-tab-nav-bar mat-primary">0
-  <div class="mat-tab-links">
-    <a class="mat-tab-link" href= "/home"></a>
-    <a class="mat-tab-link mat-tab-label-active" href="/shopping-cart">shopping-cart</a>
-  </div>
+<nav mat-tab-nav-bar>
+  <a mat-tab-link
+     *ngFor="let link of navLinks"
+     [routerLink]="link.path"
+     routerLinkActive #rla="routerLinkActive"
+     [active]="rla.isActive"
+     >
+    {{link.label}}
+  </a>
+  <label mat-tab-link [matMenuTriggerFor]="appMenu" >
+    username
+    <mat-icon>
+      menu
+    </mat-icon>
+  </label>
+  <mat-menu #appMenu="matMenu">
+    <a mat-menu-item
+       *ngFor="let item of menuItems"
+       [routerLink]="item.path">
+    {{item.label}}
+    </a>
+  </mat-menu>
 </nav>
-<app-shopping-cart></app-shopping-cart>
+<router-outlet></router-outlet>

@@ -6,7 +6,7 @@ import { ProductsComponent } from './products/products.component';
 @NgModule({
   declarations: [OrdersComponent, ProductsComponent],
   imports: [
-    CommonModule
+    CommonModule,
   ],
   exports: [OrdersComponent, ProductsComponent]
 })
