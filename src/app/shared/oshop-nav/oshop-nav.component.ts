@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from '../auth-service';
 interface NavLink {
   path: string;
   label: string;
@@ -15,16 +16,28 @@ export class OshopNavComponent implements OnInit {
     {path: 'home', label: 'O'},
     {path: 'shopping-cart', label: 'shopping-cart'}
   ];
+  loginLink: NavLink = {path: 'login', label: 'Login'};
   menuItems: NavLink[] = [
     {path: 'user/orders', label: 'My Orders'},
-    {path: 'admin/orders', label: 'Manage Orders'},
-    {path: 'admin/products', label: 'Manage Products'},
     {path: 'logout', label: 'logout'}
   ] ;
-
-  constructor() { }
-
+  adminMenuItems: NavLink[] = [
+    {path: 'admin/products', label: 'Manage Products'},
+    {path: 'admin/orders', label: 'Manage Orders'}
+  ];
+  constructor(private authService: AuthService) { }
+  isAuth(): boolean {
+    return this.authService.isAuth();
+  }
+  getUserName() {
+    if (!this.isAuth()) {
+      return 'anonymous';
+    }
+    return this.authService.getUser().displayName;
+  }
   ngOnInit() {
   }
-
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 }

@@ -12,15 +12,24 @@ import {HomeComponent} from '../user/home/home.component';
 import {ShoppingCartComponent} from '../user/shopping-cart/shopping-cart.component';
 import {MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule} from '@angular/material';
 import { LoginComponent } from './login/login.component';
-import {AngularFireModule} from '@angular/fire';
+import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AuthService} from './auth-service';
+import {AuthFirebaseService} from './auth-firebase.service';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AdminGuard, AuthGuard} from './auth-guard';
 const routes: Routes = [
-  {path: 'admin/orders', component: AdminOrders},
-  {path: 'user/orders', component: OrdersComponent},
-  {path: 'admin/products', component: ProductsComponent},
-  {path: 'logout', component: LogoutComponent},
+  {path: 'admin/orders', component: AdminOrders,
+  canActivate: [AdminGuard]},
+  {path: 'user/orders', component: OrdersComponent,
+  canActivate: [AuthGuard]},
+  {path: 'admin/products', component: ProductsComponent,
+    canActivate: [AdminGuard]},
+  {path: 'logout', component: LogoutComponent,
+    canActivate: [AuthGuard]},
   {path: 'home', component: HomeComponent},
   {path: 'shopping-cart', component: ShoppingCartComponent},
-  {path: '', redirectTo: 'home', pathMatch: 'full'}
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: 'login', component: LoginComponent}
 ]
 @NgModule({
   declarations: [OshopNavComponent, LogoutComponent, LoginComponent],
@@ -33,9 +42,11 @@ const routes: Routes = [
     MatMenuModule,
     MatTabsModule,
     MatButtonModule,
-    AngularFireModule
+    AngularFireAuthModule,
+    AngularFirestoreModule
 
   ],
-  exports: [OshopNavComponent]
+  exports: [OshopNavComponent],
+  providers: [{provide: AuthService, useClass: AuthFirebaseService}]
 })
 export class SharedModule { }

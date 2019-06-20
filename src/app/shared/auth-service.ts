@@ -3,7 +3,6 @@ export interface User {
   email: string;
   displayName: string;
 }
-
 export abstract class AuthService {
   abstract isAuth(): boolean;
   abstract isAdmin(): boolean;
