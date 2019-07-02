@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import {Product, ProductsService} from './abstract-products-service';
 import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
 import {AngularFirestore} from '@angular/fire/firestore';
+import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 const PRODUCTS = 'products';
+
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsFirebaseService implements ProductsService{
+export class ProductsFirebaseService implements ProductsService {
+
   constructor(private httpClient: HttpClient,
               private fireStore: AngularFirestore) {
-    fireStore.collection<Product>(PRODUCTS)
+    fireStore
+      .collection<Product>(PRODUCTS)
       .valueChanges()
       .subscribe(data => {
         if (!data || data.length === 0) {
@@ -25,17 +28,30 @@ export class ProductsFirebaseService implements ProductsService{
   }
 
   deleteProduct(id: string): Promise<void> {
-    return this.fireStore.collection(PRODUCTS)
-      .doc(id).delete();
+    return this.fireStore
+      .collection(PRODUCTS)
+      .doc(id)
+      .delete();
   }
 
   getProduct(id: string): Observable<Product> {
-    return this.fireStore.collection<Product>(PRODUCTS)
-      .doc(id).get().pipe(map(doc => doc.data() as Product ));
+    return this.fireStore
+      .collection<Product>(PRODUCTS)
+      .doc(id)
+      .get()
+      .pipe(map(doc => doc.data() as Product));
   }
 
-  getProducts(): Observable<Product[]> {
-    return this.fireStore.collection<Product>(PRODUCTS).valueChanges();
+  getProducts(category?: string): Observable<Product[]> {
+    if (!category) {
+      return this.fireStore
+        .collection<Product>(PRODUCTS)
+        .valueChanges();
+    }
+    return this.fireStore
+      .collection<Product>(PRODUCTS, ref => {
+      return ref.where('category', '==', category);
+    }).valueChanges();
   }
 
   updateProduct(product: Product): Promise<void> {
@@ -43,17 +59,20 @@ export class ProductsFirebaseService implements ProductsService{
   }
 
   private createProducts() {
-    this.httpClient.get<Product[]>
-    ('assets/products.json').subscribe(data => {
+    this.httpClient
+      .get<Product[]>('assets/products.json')
+      .subscribe(data => {
       data.forEach((product, index) => {
-        product.id = '' + (index + 1) ;
+        product.id = '' + (index + 1);
         this.addUpdate(product);
       });
     });
   }
 
   private addUpdate(product: Product) {
-    return this.fireStore.collection<Product>(PRODUCTS)
-      .doc(product.id).set(product);
+    return this.fireStore
+      .collection<Product>(PRODUCTS)
+      .doc(product.id)
+      .set(product);
   }
 }

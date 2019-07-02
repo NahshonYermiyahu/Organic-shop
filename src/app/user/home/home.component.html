@@ -1,3 +1,41 @@
-<p>
-  home works!
-</p>
+<div class="categories-products">
+  <mat-selection-list class="categories"
+                      (selectionChange)="selection($event)">
+    <mat-list-option *ngFor="let category of categories$|async"
+                     [value]="category.id">
+      {{category.id}}
+    </mat-list-option>
+  </mat-selection-list>
+  <mat-list class="products-list">
+    <mat-grid-list cols="3" [rowHeight]="rowHeight" gutterSize="2px">
+      <mat-grid-tile
+        *ngFor="let product of products$|async"
+        class="tile-item">
+        <mat-card style="display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center">
+
+          <mat-card-content>
+            <img [src]="product.imageUrl"
+                 style="height: 18vw;
+                        width: 20vw">
+          </mat-card-content>
+
+          <mat-card-content>
+            <label>{{product.title|lengthLimit:8}}</label>
+          </mat-card-content>
+
+          <mat-card-content>
+            <label>{{product.price|currency:'USD'}}</label>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <app-product-cart style="width: 100%" [productId]="product.id" ></app-product-cart>
+          </mat-card-actions>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-list>
+</div>
+

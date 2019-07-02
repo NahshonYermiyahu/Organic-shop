@@ -4,9 +4,10 @@
      [routerLink]="link.path"
      routerLinkActive #rla="routerLinkActive"
      [active]="rla.isActive"
-  >
+     >
     {{link.label}}
   </a>
+
   <a mat-tab-link
      *ngIf="!isAuth()"
      [routerLink]="loginLink.path"
@@ -27,9 +28,10 @@
        [routerLink]="item.path">
       {{item.label}}
     </a>
+
     <div *ngIf="isAdmin()">
       <a mat-menu-item
-         *ngFor="let item of adminMenuItems"
+         *ngFor="let item of adminMenuAdmin"
          [routerLink]="item.path">
         {{item.label}}
       </a>
@@ -37,3 +39,4 @@
   </mat-menu>
 </nav>
 <router-outlet></router-outlet>
+

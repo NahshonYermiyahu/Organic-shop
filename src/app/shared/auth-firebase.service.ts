@@ -3,31 +3,38 @@ import {AuthService, User} from './auth-service';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import {AngularFirestore} from '@angular/fire/firestore';
+
 interface Administrator {
   uid: string;
 }
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthFirebaseService implements AuthService {
-user: firebase.User;
-administrators: Administrator[];
+
+  user: firebase.User;
+  administrators: Administrator[];
   constructor(private afAuth: AngularFireAuth,
               private fireStore: AngularFirestore) {
     fireStore
       .collection<Administrator>('administrators')
       .valueChanges()
       .subscribe(admins => this.administrators = admins);
-    afAuth.authState.subscribe(user => this.user = user);
+    afAuth.authState
+      .subscribe(user => this.user = user);
   }
 
   getUser(): User {
     if (!this.user) {
       return undefined;
     }
-    return {email: this.user.email,
+    return {
+      email: this.user.email,
       displayName: this.user.displayName,
-    uid: this.user.uid} as User;
+      uid: this.user.uid
+    } as User;
   }
 
   isAdmin(): boolean {
@@ -37,8 +44,9 @@ administrators: Administrator[];
     if (!this.administrators) {
       return false;
     }
-    return this.administrators.find(admin => admin.uid ===
-      this.user.uid) ? true : false;
+    return this.administrators
+        .find(admin => admin
+          .uid === this.user.uid) ? true : false;
   }
 
   isAuth(): boolean {
@@ -56,8 +64,10 @@ administrators: Administrator[];
   }
 
   private loginWithGoogle() {
-    this.afAuth.auth
-      .signInWithRedirect(new firebase.auth.GoogleAuthProvider())
+    this
+      .afAuth.auth
+      .signInWithRedirect(
+        new firebase.auth.GoogleAuthProvider())
       .then();
   }
 }

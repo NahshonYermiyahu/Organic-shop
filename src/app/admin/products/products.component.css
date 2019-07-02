@@ -10,10 +10,12 @@ table {
 td, th {
   width: 30%;
 }
+
 .icons {
   width: 5%;
 
 }
+
 .actions {
   cursor: pointer;
 }

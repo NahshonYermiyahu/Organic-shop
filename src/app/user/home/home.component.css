@@ -1,0 +1,9 @@
+.products-list {
+  height: 90vh;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+.categories-products {
+  display: flex;
+  flex-direction: row;
+}

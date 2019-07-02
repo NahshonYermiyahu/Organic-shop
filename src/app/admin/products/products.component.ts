@@ -4,7 +4,7 @@ import {CategoriesService} from '../categories.service';
 import {Router} from '@angular/router';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
-// @ts-ignore
+
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -12,22 +12,32 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 })
 export class ProductsComponent implements OnInit {
 
+  filter: string;
+  displayedColumns: string[] = ['title', 'price', 'category', 'edit', 'delete'];
+  dataSource: MatTableDataSource<Product>;
+
   constructor(private productsService: ProductsService,
               private categoriesService: CategoriesService,
               private router: Router) { }
-  displayedColumns: string[] = ['title', 'price', 'category', 'edit', 'delete'];
-  dataSource: MatTableDataSource<Product>;
-filter: string;
+
+  // @ts-ignore
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  // @ts-ignore
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+
   ngOnInit() {
-    this.productsService.getProducts()
+    this.productsService
+      .getProducts()
       .subscribe(products => {
-        this.dataSource = new MatTableDataSource<Product>(products);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.dataSource.filter = this.filter;
-      });
+      this.dataSource = new MatTableDataSource<Product>(products);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.filter = this.filter;
+      this.dataSource.sort = this.sort;
+    });
+  }
+
+  addProduct() {
+    this.router.navigate(['product/add']);
   }
 
   applyFilter(filterValue: string) {
@@ -41,11 +51,8 @@ filter: string;
   edit(id: string) {
     this.router.navigate(['edit', id]);
   }
+
   delete(id: string) {
     this.productsService.deleteProduct(id);
   }
-  addProduct() {
-    this.router.navigate(['product/add']);
-  }
-
 }
