@@ -1,0 +1,65 @@
+<div class="mat-card" *ngIf="product" >
+  <h4 class="mat-card-header" style="text-align: center">
+    Update product's price {{product.title}}
+  </h4>
+  <div style="display: flex; justify-content: space-around"
+       >
+
+    <div>
+      <div class="mat-card-body">
+        <form #form="ngForm" (ngSubmit)="update()">
+          <div>
+            <mat-form-field>
+              <input matInput [ngModel]="product.id" name="id"
+                     placeholder="id" readonly>
+
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput [ngModel]="product.title" name="title"
+                     placeholder="title" readonly>
+
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input type="number" matInput [(ngModel)]="product.price" name="price"
+                     placeholder="price" #price="ngModel" >
+
+              <mat-error>
+                Price should be greater than 0
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput [ngModel]="product.category" name="category"
+                     placeholder="category" readonly>
+
+            </mat-form-field>
+          </div>
+
+          <div>
+            <button mat-raised-button type="submit" *ngIf="price.dirty">update</button>
+            <button mat-raised-button (click)="cancel()" >cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div >
+      <img style="width: 30vw; height: 25vw" [src]="product.imageUrl">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+<div class="product-cart" *ngIf="quantity != 0; else add_product">
+  <button class="product-button" (click)="subtractQuantity()">-</button>
+  <label class="product-label">{{quantity}}</label>
+  <button class="product-button" (click)="addQuantity()">+</button>
+</div>
+<ng-template #add_product>
+  <button class="product-add-button" (click)="addProduct()">add product</button>
+</ng-template>

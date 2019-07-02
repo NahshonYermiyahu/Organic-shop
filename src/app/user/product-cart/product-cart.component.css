@@ -1,0 +1,16 @@
+.product-cart{
+  display: flex;
+  flex-direction: row;
+  width: 18vw;
+}
+.product-button{
+  width: 20%;
+}
+.product-label{
+  width: 50%;
+  text-align: center;
+  border: solid 1px rebeccapurple;
+}
+.product-add-button{
+  width: 100%;
+}
