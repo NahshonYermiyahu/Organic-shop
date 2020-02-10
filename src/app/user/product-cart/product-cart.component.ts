@@ -8,6 +8,9 @@ import {CartService} from '../cart.service';
 })
 export class ProductCartComponent implements OnInit {
   @Input() productId: string;
+  @Input() productTitle: string;
+  @Input() productPrice: string;
+  @Input() imageUrl: string;
   quantity = 0;
 
   constructor(private cartService: CartService) { }
@@ -25,20 +28,24 @@ export class ProductCartComponent implements OnInit {
         .then(() => this.quantity = 0);
     } else {
       this.cartService
-        .updateProductCart(this.productId, this.quantity - 1 )
+        .updateProductCart(this.productId, this.productTitle, this.productPrice, this.imageUrl, this.quantity - 1 )
         .then(() => -- this.quantity);
     }
   }
 
   addQuantity() {
     this.cartService
-      .updateProductCart(this.productId, this.quantity + 1 )
+      .updateProductCart(this.productId, this.productTitle, this.productPrice, this.imageUrl, this.quantity + 1 )
       .then(() => ++ this.quantity);
   }
 
   addProduct() {
-    this.cartService.createProductCart(this.productId).then(() => this.quantity = 1);
+    this.cartService
+      .createProductCart(
+        this.productId,
+        this.productTitle,
+        this.productPrice,
+        this.imageUrl)
+      .then(() => this.quantity = 1);
   }
-
-
 }

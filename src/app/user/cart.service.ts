@@ -17,6 +17,9 @@ export interface ProductCart {
   cartId: string;
   productId: string;
   quantity: number;
+  productTitle: string;
+  productPrice: string;
+  imageUrl: string;
 }
 
 @Injectable({
@@ -39,13 +42,14 @@ export class CartService {
     }
   }
 
-  createProductCart(productId: string): Promise<void> {
-    return this.updateProductCart(productId, 1);
+  createProductCart(productId: string,
+                    productTitle: string, productPrice: string, imageUrl: string): Promise<void> {
+    return this.updateProductCart( productId, productTitle, productPrice, imageUrl, 1);
   }
 
-  updateProductCart(productId: string, quantity: number): Promise<void> {
+  updateProductCart( productId: string, productTitle: string, productPrice: string, imageUrl: string, quantity: number): Promise<void> {
     const id = this.cartId + productId;
-    const productCart: ProductCart = {quantity, productId, cartId: this.cartId};
+    const productCart: ProductCart = {productTitle, productPrice, imageUrl, quantity, productId, cartId: this.cartId};
     return this.fireStore
       .collection<ProductCart>(CartConfig.CART_PRODUCTS)
       .doc(id)
@@ -54,7 +58,9 @@ export class CartService {
 
   removeProductCart(productId: string): Promise<void> {
     const id = this.cartId + productId;
-    return this.fireStore.collection(CartConfig.CART_PRODUCTS).doc(id).delete();
+    return this.fireStore.collection(CartConfig.CART_PRODUCTS)
+      .doc(id)
+      .delete();
   }
 
   getProductCart(productId: string): Observable<ProductCart> {
@@ -63,5 +69,17 @@ export class CartService {
       .doc(this.cartId + productId)
       .get()
       .pipe(map(d => d.data() as ProductCart));
+  }
+
+  getCart(cartId ?: string): Observable<ProductCart[]> {
+    if (!cartId) {
+      return this.fireStore
+        .collection<ProductCart>(CartConfig.CART_PRODUCTS)
+        .valueChanges();
+    }
+    return this.fireStore
+      .collection<ProductCart>(CartConfig.CART_PRODUCTS, ref => {
+        return ref.where('cartId', '==', cartId);
+      }).valueChanges();
   }
 }

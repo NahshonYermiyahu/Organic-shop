@@ -6,6 +6,7 @@
       {{category.id}}
     </mat-list-option>
   </mat-selection-list>
+
   <mat-list class="products-list">
     <mat-grid-list cols="3" [rowHeight]="rowHeight" gutterSize="2px">
       <mat-grid-tile
@@ -31,8 +32,14 @@
           </mat-card-content>
 
           <mat-card-actions>
-            <app-product-cart style="width: 100%" [productId]="product.id" ></app-product-cart>
+            <app-product-cart
+              style="width: 100%"
+              [productId]="product.id"
+              [productTitle] ="product.title"
+              [productPrice] = "product.price"
+              [imageUrl] = "product.imageUrl"></app-product-cart>
           </mat-card-actions>
+
         </mat-card>
       </mat-grid-tile>
     </mat-grid-list>
